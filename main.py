@@ -1,8 +1,7 @@
-#Mail Sender by t4xe
+#Mail Sender v0.2 by t4xe.
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QLineEdit
 import smtplib
-
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -45,16 +44,12 @@ class Ui_Form(object):
         self.passwordLineEdit = QtWidgets.QLineEdit(Form)
         self.passwordLineEdit.setGeometry(QtCore.QRect(350, 50, 113, 21))
         self.passwordLineEdit.setObjectName("passwordLineEdit")
-        #self.showPasswordBox = QtWidgets.QCheckBox(Form)
-        #self.showPasswordBox.setGeometry(QtCore.QRect(300, 80, 111, 17))
-        #self.showPasswordBox.setObjectName("showPasswordBox")
+        self.showPasswordBox = QtWidgets.QCheckBox(Form)
+        self.showPasswordBox.setGeometry(QtCore.QRect(300, 80, 111, 17))
+        self.showPasswordBox.setObjectName("showPasswordBox")
 
-        self.pushButton.clicked.connect(self.sendMail)
-            
-        self.passwordLineEdit.setEchoMode(QLineEdit.Password)
-        
-        #if self.showPasswordBox.isChecked():
-            #self.passwordLineEdit.setEchoMode(QLineEdit.NoEcho)
+        self.pushButton.clicked.connect(self.sendMail)       
+        self.showPasswordBox.stateChanged.connect(self.showPwStateChanged)
         
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -68,7 +63,7 @@ class Ui_Form(object):
         self.senderLabel.setText(_translate("Form", "Sender:"))
         self.passwordLabel.setText(_translate("Form", "Password:"))
         self.pushButton.setText(_translate("Form", "Send"))
-        #self.showPasswordBox.setText(_translate("Form", "Show Password"))      
+        self.showPasswordBox.setText(_translate("Form", "Show Password"))      
    
     def sendMail(self):
         firstLen = len(self.receiverLineEdit.text())
@@ -100,6 +95,13 @@ class Ui_Form(object):
                 print(e)
         else:
             self.sentOrErrorLabel.setText("Please fill all fields.")
+            
+    def showPwStateChanged(self):
+        if self.showPasswordBox.isChecked():
+            self.passwordLineEdit.setEchoMode(QLineEdit.Password)
+        else:
+            self.passwordLineEdit.setEchoMode(QLineEdit.Normal)
+            
 
 if __name__ == "__main__":
     import sys
@@ -109,3 +111,4 @@ if __name__ == "__main__":
     ui.setupUi(Form)
     Form.show()
     sys.exit(app.exec_())
+    
