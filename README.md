@@ -1,4 +1,5 @@
 Mail Sender v0.1
+
 Usage:
 
 Type in receiver's email address, subject and message.
