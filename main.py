@@ -1,4 +1,4 @@
-#Mail Sender v0.2 by t4xe.
+#Mail Sender v0.3 by t4xe.
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QLineEdit
 import smtplib
@@ -48,8 +48,10 @@ class Ui_Form(object):
         self.showPasswordBox.setGeometry(QtCore.QRect(300, 80, 111, 17))
         self.showPasswordBox.setObjectName("showPasswordBox")
 
-        self.pushButton.clicked.connect(self.sendMail)       
+        self.pushButton.clicked.connect(self.sendMail)      
         self.showPasswordBox.stateChanged.connect(self.showPwStateChanged)
+        
+        self.passwordLineEdit.setEchoMode(QLineEdit.Password)
         
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -71,36 +73,41 @@ class Ui_Form(object):
         thirdLen = len(self.subjectLineEdit.text())
         fourthLen = len(self.senderLineEdit.text())
         fifthLen = len(self.passwordLineEdit.text())
-        
+         
+        sender = self.senderLineEdit.text()
+        receiver = self.receiverLineEdit.text()
         if firstLen and secondLen and thirdLen and fourthLen and fifthLen != 0:
-            try: 
-                sender = self.senderLineEdit.text()
-                password = self.passwordLineEdit.text()
-                receiver = self.receiverLineEdit.text()
-                subject = self.subjectLineEdit.text()
-                messageText = self.messageTextEdit.toPlainText()
+            if "@" and ".com" in receiver and "@" and ".com" in sender:
+                try: 
+                    sender = self.senderLineEdit.text()
+                    password = self.passwordLineEdit.text()
+                    receiver = self.receiverLineEdit.text()
+                    subject = self.subjectLineEdit.text()
+                    messageText = self.messageTextEdit.toPlainText()
+                    
+                    smtp = smtplib.SMTP('smtp.gmail.com', 587) 
+                    smtp.starttls() 
+                    
+                    smtp.login(sender, password)               
+                    message = ("Subject: " + subject + "\n" + messageText)         
+                    smtp.sendmail(sender, receiver, message)
+                         
+                    self.sentOrErrorLabel.setText("Email sent!")
+                    smtp.quit()
                 
-                smtp = smtplib.SMTP('smtp.gmail.com', 587) 
-                smtp.starttls() 
-                
-                smtp.login(sender, password)               
-                message = ("Subject: " + subject + "\n" + messageText)         
-                smtp.sendmail(sender, receiver, message)
-                     
-                self.sentOrErrorLabel.setText("Email sent!")
-                smtp.quit()
-                
-            except Exception as e:
-                self.sentOrErrorLabel.setText("An error occured. Please read the console.")
-                print(e)
+                except Exception as e:
+                    self.sentOrErrorLabel.setText("An error occured. Please read the console.")
+                    print(e)
+            else:
+                self.sentOrErrorLabel.setText("Please enter correct addresses.")
         else:
             self.sentOrErrorLabel.setText("Please fill all fields.")
             
     def showPwStateChanged(self):
         if self.showPasswordBox.isChecked():
-            self.passwordLineEdit.setEchoMode(QLineEdit.Password)
-        else:
             self.passwordLineEdit.setEchoMode(QLineEdit.Normal)
+        else:
+            self.passwordLineEdit.setEchoMode(QLineEdit.Password)
             
 
 if __name__ == "__main__":
@@ -111,4 +118,3 @@ if __name__ == "__main__":
     ui.setupUi(Form)
     Form.show()
     sys.exit(app.exec_())
-    
