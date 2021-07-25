@@ -1,10 +1,12 @@
-#Mail Sender v0.3 by t4xe.
+#Mail Sender v0.5 by t4xe.
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QLineEdit
+from datetime import datetime
+from time import sleep
 import smtplib
 
 class Ui_Form(object):
-    def setupUi(self, Form):
+    def setupUi(self, Form):   
         Form.setObjectName("Form")
         Form.resize(499, 290)
         self.receiverLabel = QtWidgets.QLabel(Form)
@@ -47,6 +49,9 @@ class Ui_Form(object):
         self.showPasswordBox = QtWidgets.QCheckBox(Form)
         self.showPasswordBox.setGeometry(QtCore.QRect(300, 80, 111, 17))
         self.showPasswordBox.setObjectName("showPasswordBox")
+        self.dateAndTimeLabel = QtWidgets.QLabel(Form)
+        self.dateAndTimeLabel.setGeometry(QtCore.QRect(10, 270, 140, 21))     
+        self.dateAndTimeLabel.setObjectName("dateAndTimeLabel")        
 
         self.pushButton.clicked.connect(self.sendMail)      
         self.showPasswordBox.stateChanged.connect(self.showPwStateChanged)
@@ -57,6 +62,9 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
+        dateAndTime = datetime.now()
+        fullDate = datetime.strftime(dateAndTime, "%D")
+    
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Mail Sender"))
         self.receiverLabel.setText(_translate("Form", "Receiver:"))
@@ -65,8 +73,9 @@ class Ui_Form(object):
         self.senderLabel.setText(_translate("Form", "Sender:"))
         self.passwordLabel.setText(_translate("Form", "Password:"))
         self.pushButton.setText(_translate("Form", "Send"))
-        self.showPasswordBox.setText(_translate("Form", "Show Password"))      
-   
+        self.showPasswordBox.setText(_translate("Form", "Show Password"))  
+        self.dateAndTimeLabel.setText(_translate("Form", fullDate))
+        
     def sendMail(self):
         firstLen = len(self.receiverLineEdit.text())
         secondLen = len(self.messageTextEdit.toPlainText())
@@ -84,22 +93,24 @@ class Ui_Form(object):
                     receiver = self.receiverLineEdit.text()
                     subject = self.subjectLineEdit.text()
                     messageText = self.messageTextEdit.toPlainText()
-                    
+                        
                     smtp = smtplib.SMTP('smtp.gmail.com', 587) 
+                    smtp.ehlo()
                     smtp.starttls() 
-                    
+                    smtp.ehlo()
+                        
                     smtp.login(sender, password)               
                     message = ("Subject: " + subject + "\n" + messageText)         
-                    smtp.sendmail(sender, receiver, message)
-                         
-                    self.sentOrErrorLabel.setText("Email sent!")
+                    smtp.sendmail(sender, receiver, message.encode("utf8"))
+                             
+                    self.sentOrErrorLabel.setText("Email sent.")
                     smtp.quit()
-                
+                    
                 except Exception as e:
                     self.sentOrErrorLabel.setText("An error occured. Please read the console.")
-                    print(e)
+                    print(e)                   
             else:
-                self.sentOrErrorLabel.setText("Please enter correct addresses.")
+                self.sentOrErrorLabel.setText("Please enter correct addresses.")                    
         else:
             self.sentOrErrorLabel.setText("Please fill all fields.")
             
@@ -108,7 +119,6 @@ class Ui_Form(object):
             self.passwordLineEdit.setEchoMode(QLineEdit.Normal)
         else:
             self.passwordLineEdit.setEchoMode(QLineEdit.Password)
-            
 
 if __name__ == "__main__":
     import sys
