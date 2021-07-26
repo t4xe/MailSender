@@ -1,4 +1,4 @@
-#Mail Sender v0.5 by t4xe.
+#Mail Sender v0.7 by t4xe.
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QLineEdit
 from datetime import datetime
@@ -29,22 +29,22 @@ class Ui_Form(object):
         self.sentOrErrorLabel.setText("")
         self.sentOrErrorLabel.setObjectName("sentOrErrorLabel")
         self.receiverLineEdit = QtWidgets.QLineEdit(Form)
-        self.receiverLineEdit.setGeometry(QtCore.QRect(70, 20, 121, 21))
+        self.receiverLineEdit.setGeometry(QtCore.QRect(70, 20, 131, 21))
         self.receiverLineEdit.setObjectName("receiverLineEdit")
         self.subjectLineEdit = QtWidgets.QLineEdit(Form)
-        self.subjectLineEdit.setGeometry(QtCore.QRect(70, 60, 121, 21))
+        self.subjectLineEdit.setGeometry(QtCore.QRect(70, 60, 131, 21))
         self.subjectLineEdit.setObjectName("subjectLineEdit")
         self.messageTextEdit = QtWidgets.QTextEdit(Form)
-        self.messageTextEdit.setGeometry(QtCore.QRect(70, 100, 121, 81))
+        self.messageTextEdit.setGeometry(QtCore.QRect(70, 100, 131, 81))
         self.messageTextEdit.setObjectName("messageTextEdit")
         self.pushButton = QtWidgets.QPushButton(Form)
         self.pushButton.setGeometry(QtCore.QRect(20, 240, 75, 23))
         self.pushButton.setObjectName("pushButton")
         self.senderLineEdit = QtWidgets.QLineEdit(Form)
-        self.senderLineEdit.setGeometry(QtCore.QRect(350, 20, 113, 21))
+        self.senderLineEdit.setGeometry(QtCore.QRect(350, 20, 131, 21))
         self.senderLineEdit.setObjectName("senderLineEdit")
         self.passwordLineEdit = QtWidgets.QLineEdit(Form)
-        self.passwordLineEdit.setGeometry(QtCore.QRect(350, 50, 113, 21))
+        self.passwordLineEdit.setGeometry(QtCore.QRect(350, 50, 131, 21))
         self.passwordLineEdit.setObjectName("passwordLineEdit")
         self.showPasswordBox = QtWidgets.QCheckBox(Form)
         self.showPasswordBox.setGeometry(QtCore.QRect(300, 80, 111, 17))
@@ -74,7 +74,7 @@ class Ui_Form(object):
         self.passwordLabel.setText(_translate("Form", "Password:"))
         self.pushButton.setText(_translate("Form", "Send"))
         self.showPasswordBox.setText(_translate("Form", "Show Password"))  
-        self.dateAndTimeLabel.setText(_translate("Form", fullDate))
+        self.dateAndTimeLabel.setText(_translate("Form", "Date: " + fullDate))
         
     def sendMail(self):
         firstLen = len(self.receiverLineEdit.text())
@@ -105,10 +105,12 @@ class Ui_Form(object):
                              
                     self.sentOrErrorLabel.setText("Email sent.")
                     smtp.quit()
-                    
+                except smtplib.SMTPAuthenticationError as e:
+                    self.sentOrErrorLabel.setText("Username and password does not match.")
+                    print(e)                     
                 except Exception as e:
                     self.sentOrErrorLabel.setText("An error occured. Please read the console.")
-                    print(e)                   
+                    print(e)
             else:
                 self.sentOrErrorLabel.setText("Please enter correct addresses.")                    
         else:
