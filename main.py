@@ -1,6 +1,5 @@
-#Mail Sender v0.7 by t4xe.
+#Mail Sender v0.8 by t4xe.
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QLineEdit
 from datetime import datetime
 import smtplib
 
@@ -55,7 +54,7 @@ class Ui_Form(object):
         self.pushButton.clicked.connect(self.sendMail)      
         self.showPasswordBox.stateChanged.connect(self.showPwStateChanged)
         
-        self.passwordLineEdit.setEchoMode(QLineEdit.Password)
+        self.passwordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
         
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -111,7 +110,7 @@ class Ui_Form(object):
                     self.sentOrErrorLabel.setText("Server unexpectedly disconnected.")
                     print(str(e) + "\nIf you can't solve the problem, please contact with me by T4XE#0610 discord address.")
                 except smtplib.SMTPDataError as e:
-                    self.sentOrErrorLabel.setText("Server refused to accept the message data.")
+                    self.sentOrErrorLabel.setText("The SMTP server refused to accept the message data.")
                     print(str(e) + "\nIf you can't solve the problem, please contact with me by T4XE#0610 discord address.")         
                 except Exception as e:
                     self.sentOrErrorLabel.setText("An unexpected error occured. Please read the console.")
@@ -123,9 +122,9 @@ class Ui_Form(object):
             
     def showPwStateChanged(self):
         if self.showPasswordBox.isChecked():
-            self.passwordLineEdit.setEchoMode(QLineEdit.Normal)
+            self.passwordLineEdit.setEchoMode(QtWidgets.QLineEdit.Normal)
         else:
-            self.passwordLineEdit.setEchoMode(QLineEdit.Password)
+            self.passwordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
 
 if __name__ == "__main__":
     import sys
