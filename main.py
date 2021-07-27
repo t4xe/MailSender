@@ -1,4 +1,4 @@
-#Mail Sender v0.8 by t4xe.
+#Mail Sender v0.7 by t4xe.
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QLineEdit
 from datetime import datetime
