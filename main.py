@@ -2,7 +2,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QLineEdit
 from datetime import datetime
-from time import sleep
 import smtplib
 
 class Ui_Form(object):
