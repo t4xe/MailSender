@@ -8,4 +8,4 @@ and click the 'Send' button. If an error occurs, it will
 appear on right of the send button.
 
 NOTE: You must activate 'less secure app access' from your
-mail account before using this program.
+mail account before using this program. 
