@@ -62,7 +62,7 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         dateAndTime = datetime.now()
-        fullDate = datetime.strftime(dateAndTime, "%D")
+        currentDate = datetime.strftime(dateAndTime, "%D")
     
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Mail Sender"))
@@ -73,7 +73,7 @@ class Ui_Form(object):
         self.passwordLabel.setText(_translate("Form", "Password:"))
         self.pushButton.setText(_translate("Form", "Send"))
         self.showPasswordBox.setText(_translate("Form", "Show Password"))  
-        self.dateAndTimeLabel.setText(_translate("Form", "Date: " + fullDate))
+        self.dateAndTimeLabel.setText(_translate("Form", "Date: " + currentDate))
         
     def sendMail(self):
         firstLen = len(self.receiverLineEdit.text())
@@ -111,7 +111,7 @@ class Ui_Form(object):
                     self.sentOrErrorLabel.setText("Server unexpectedly disconnected.")
                     print(str(e) + "\nIf you can't solve the problem, please contact with me by T4XE#0610 discord address.")
                 except smtplib.SMTPDataError as e:
-                    self.sentOrErrorLabel.setText("The SMTP server refused to accept the message data.")
+                    self.sentOrErrorLabel.setText("Server refused to accept the message data.")
                     print(str(e) + "\nIf you can't solve the problem, please contact with me by T4XE#0610 discord address.")         
                 except Exception as e:
                     self.sentOrErrorLabel.setText("An unexpected error occured. Please read the console.")
