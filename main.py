@@ -52,8 +52,7 @@ class Ui_Form(object):
         self.dateAndTimeLabel.setObjectName("dateAndTimeLabel")        
 
         self.pushButton.clicked.connect(self.sendMail)      
-        self.showPasswordBox.stateChanged.connect(self.showPwStateChanged)
-        
+        self.showPasswordBox.stateChanged.connect(self.showPwStateChanged)        
         self.passwordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
         
         self.retranslateUi(Form)
