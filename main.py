@@ -1,7 +1,7 @@
 #Mail Sender v1.8 by t4xe.
 from PyQt5 import QtCore, QtGui, QtWidgets
 from datetime import datetime
-import smtplib
+from smtplib import SMTP
 
 class Ui_Form(object):
     def setupUi(self, Form):   
