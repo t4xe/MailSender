@@ -1,4 +1,4 @@
-Mail Sender v1.8
+Version Info: v1.8
 
 Usage:
 
