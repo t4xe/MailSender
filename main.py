@@ -111,9 +111,6 @@ class Ui_Form(object):
                 except smtplib.SMTPDataError as e:
                     self.sentOrErrorLabel.setText("The SMTP server refused to accept the message data.")
                     print(str(e) + "\nIf you can't solve the problem, please contact with me by T4XE#0610 discord address.")         
-                except Exception as e:
-                    self.sentOrErrorLabel.setText("An unexpected error occured. Please read the console.")
-                    print(str(e) + "\nIf you can't solve the problem, please contact with me by T4XE#0610 discord address.")
             else:
                 self.sentOrErrorLabel.setText("Please enter correct addresses.")                    
         else:
