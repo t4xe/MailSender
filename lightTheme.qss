@@ -1,0 +1,14 @@
+QLabel {
+	font-family:Roboto Black 900;
+	font-size:12px;
+}
+
+QPushButton {
+	font-family:Roboto;
+	font-size:12px;	
+}
+
+QCheckBox {
+	font-family:Roboto;
+	font-size:12px;	
+}
