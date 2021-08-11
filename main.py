@@ -1,58 +1,80 @@
-#Mail Sender v1.8 by t4xe.
+#Mail Sender v1.9 by t4xe.
 from PyQt5 import QtCore, QtGui, QtWidgets
 from datetime import datetime
 from smtplib import SMTP
+import qdarkstyle
 
 class Ui_Form(object):
     def setupUi(self, Form):   
         Form.setObjectName("Form")
         Form.resize(499, 290)
+        Form.setMaximumSize(499, 290)
+        Form.setMinimumSize(499, 290)
+        
         self.receiverLabel = QtWidgets.QLabel(Form)
-        self.receiverLabel.setGeometry(QtCore.QRect(20, 20, 61, 20))
+        self.receiverLabel.setGeometry(QtCore.QRect(10, 20, 61, 20))
         self.receiverLabel.setObjectName("receiverLabel")
+        
         self.subjectLabel = QtWidgets.QLabel(Form)
-        self.subjectLabel.setGeometry(QtCore.QRect(20, 60, 61, 21))
+        self.subjectLabel.setGeometry(QtCore.QRect(10, 60, 61, 21))
         self.subjectLabel.setObjectName("subjectLabel")
+        
         self.messageLabel = QtWidgets.QLabel(Form)
-        self.messageLabel.setGeometry(QtCore.QRect(20, 100, 61, 21))
+        self.messageLabel.setGeometry(QtCore.QRect(10, 100, 61, 21))
         self.messageLabel.setObjectName("messageLabel")
+        
         self.senderLabel = QtWidgets.QLabel(Form)
-        self.senderLabel.setGeometry(QtCore.QRect(300, 20, 47, 21))
+        self.senderLabel.setGeometry(QtCore.QRect(285, 20, 80, 21))
         self.senderLabel.setObjectName("senderLabel")
+        
         self.passwordLabel = QtWidgets.QLabel(Form)
-        self.passwordLabel.setGeometry(QtCore.QRect(300, 50, 51, 21))
+        self.passwordLabel.setGeometry(QtCore.QRect(285, 50, 80, 21))
         self.passwordLabel.setObjectName("passwordLabel")
+        
         self.sentOrErrorLabel = QtWidgets.QLabel(Form)
         self.sentOrErrorLabel.setGeometry(QtCore.QRect(110, 240, 250, 21))
         self.sentOrErrorLabel.setText("")
         self.sentOrErrorLabel.setObjectName("sentOrErrorLabel")
+        
         self.receiverLineEdit = QtWidgets.QLineEdit(Form)
         self.receiverLineEdit.setGeometry(QtCore.QRect(70, 20, 131, 21))
         self.receiverLineEdit.setObjectName("receiverLineEdit")
+        
         self.subjectLineEdit = QtWidgets.QLineEdit(Form)
         self.subjectLineEdit.setGeometry(QtCore.QRect(70, 60, 131, 21))
         self.subjectLineEdit.setObjectName("subjectLineEdit")
+        
         self.messageTextEdit = QtWidgets.QTextEdit(Form)
         self.messageTextEdit.setGeometry(QtCore.QRect(70, 100, 131, 81))
         self.messageTextEdit.setObjectName("messageTextEdit")
+        
         self.pushButton = QtWidgets.QPushButton(Form)
-        self.pushButton.setGeometry(QtCore.QRect(20, 240, 75, 23))
+        self.pushButton.setGeometry(QtCore.QRect(10, 240, 75, 23))
         self.pushButton.setObjectName("pushButton")
+        
         self.senderLineEdit = QtWidgets.QLineEdit(Form)
         self.senderLineEdit.setGeometry(QtCore.QRect(350, 20, 131, 21))
         self.senderLineEdit.setObjectName("senderLineEdit")
+        
         self.passwordLineEdit = QtWidgets.QLineEdit(Form)
         self.passwordLineEdit.setGeometry(QtCore.QRect(350, 50, 131, 21))
         self.passwordLineEdit.setObjectName("passwordLineEdit")
+        
         self.showPasswordBox = QtWidgets.QCheckBox(Form)
-        self.showPasswordBox.setGeometry(QtCore.QRect(300, 80, 111, 17))
+        self.showPasswordBox.setGeometry(QtCore.QRect(285, 80, 111, 21))
         self.showPasswordBox.setObjectName("showPasswordBox")
+        
         self.dateAndTimeLabel = QtWidgets.QLabel(Form)
         self.dateAndTimeLabel.setGeometry(QtCore.QRect(10, 270, 140, 21))     
-        self.dateAndTimeLabel.setObjectName("dateAndTimeLabel")        
+        self.dateAndTimeLabel.setObjectName("dateAndTimeLabel")
 
-        self.pushButton.clicked.connect(self.sendMail)      
-        self.showPasswordBox.stateChanged.connect(self.showPwStateChanged)        
+        self.themeCheckBox = QtWidgets.QCheckBox(Form)
+        self.themeCheckBox.setGeometry(QtCore.QRect(285, 100, 111, 21))
+        self.themeCheckBox.setObjectName("themeCheckBox")        
+        
+        self.pushButton.clicked.connect(self.sendMail)
+        self.showPasswordBox.stateChanged.connect(self.showPwStateChanged)  
+        self.themeCheckBox.stateChanged.connect(self.themeCheckBoxStateChanged)          
         self.passwordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
         
         self.retranslateUi(Form)
@@ -71,7 +93,8 @@ class Ui_Form(object):
         self.passwordLabel.setText(_translate("Form", "Password:"))
         self.pushButton.setText(_translate("Form", "Send"))
         self.showPasswordBox.setText(_translate("Form", "Show Password"))  
-        self.dateAndTimeLabel.setText(_translate("Form", "Date: " + currentDate))
+        self.dateAndTimeLabel.setText(_translate("Form", "Date: " + currentDate))  
+        self.themeCheckBox.setText(_translate("Form", "Dark Mode"))
         
     def sendMail(self):
         firstLen = len(self.receiverLineEdit.text())
@@ -110,7 +133,22 @@ class Ui_Form(object):
                     print(str(e) + "\nIf you can't solve the problem, please contact with me by T4XE#0610 discord address.")
                 except smtplib.SMTPDataError as e:
                     self.sentOrErrorLabel.setText("The SMTP server refused to accept the message data.")
-                    print(str(e) + "\nIf you can't solve the problem, please contact with me by T4XE#0610 discord address.")         
+                    print(str(e) + "\nIf you can't solve the problem, please contact with me by T4XE#0610 discord address.") 
+                except smtplib.SMTPSenderRefused as e:
+                    self.sentOrErrorLabel.setText("Sender address refused.")
+                    print(str(e) + "\nIf you can't solve the problem, please contact with me by T4XE#0610 discord address.") 
+                except smtplib.SMTPRecipientsRefused as e:
+                    self.sentOrErrorLabel.setText("All recipient addresses refused.")
+                    print(str(e) + "\nIf you can't solve the problem, please contact with me by T4XE#0610 discord address.") 
+                except smtplib.SMTPNotSupportedError as e:
+                    self.sentOrErrorLabel.setText("The command or option attempted is not supported by the server.")
+                    print(str(e) + "\nIf you can't solve the problem, please contact with me by T4XE#0610 discord address.") 
+                except smtplib.SMTPConnectError as e:
+                    self.sentOrErrorLabel.setText("Error occurred during establishment of a connection with the server.")
+                    print(str(e) + "\nIf you can't solve the problem, please contact with me by T4XE#0610 discord address.")  
+                except smtplib.SMTPHeloError as e:
+                    self.sentOrErrorLabel.setText("The server refused our HELO message.")
+                    print(str(e) + "\nIf you can't solve the problem, please contact with me by T4XE#0610 discord address.")                      
             else:
                 self.sentOrErrorLabel.setText("Please enter correct addresses.")                    
         else:
@@ -122,10 +160,19 @@ class Ui_Form(object):
         else:
             self.passwordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
 
+    def themeCheckBoxStateChanged(self):
+        lightTheme = (open("lightTheme.qss", "r").read())
+        darkTheme = qdarkstyle.load_stylesheet_pyqt5()
+        if self.themeCheckBox.isChecked():
+            app.setStyleSheet(lightTheme + darkTheme)
+        else:
+            app.setStyleSheet(lightTheme)  
+            
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     Form = QtWidgets.QWidget()
+    app.setStyleSheet(open("lightTheme.qss", "r").read())
     ui = Ui_Form()
     ui.setupUi(Form)
     Form.show()
