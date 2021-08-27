@@ -1,4 +1,4 @@
-#Mail Sender v1.9 by t4xe.
+#Mail Sender v2.0 by t4xe.
 from PyQt5 import QtCore, QtGui, QtWidgets
 from datetime import datetime
 from smtplib import SMTP
@@ -11,28 +11,33 @@ class Ui_Form(object):
         Form.setMaximumSize(499, 290)
         Form.setMinimumSize(499, 290)
         
+        Form.setWindowIcon(QtGui.QIcon("icon.ico"))
+        self.firstPixLabel = 10
+        self.secondPixLabel = 285
+        self.thirdPixLabel = 110
+        
         self.receiverLabel = QtWidgets.QLabel(Form)
-        self.receiverLabel.setGeometry(QtCore.QRect(10, 20, 61, 20))
+        self.receiverLabel.setGeometry(QtCore.QRect(self.firstPixLabel, 20, 61, 20))
         self.receiverLabel.setObjectName("receiverLabel")
         
         self.subjectLabel = QtWidgets.QLabel(Form)
-        self.subjectLabel.setGeometry(QtCore.QRect(10, 60, 61, 21))
+        self.subjectLabel.setGeometry(QtCore.QRect(self.firstPixLabel, 60, 61, 21))
         self.subjectLabel.setObjectName("subjectLabel")
         
         self.messageLabel = QtWidgets.QLabel(Form)
-        self.messageLabel.setGeometry(QtCore.QRect(10, 100, 61, 21))
+        self.messageLabel.setGeometry(QtCore.QRect(self.firstPixLabel, 100, 61, 21))
         self.messageLabel.setObjectName("messageLabel")
         
         self.senderLabel = QtWidgets.QLabel(Form)
-        self.senderLabel.setGeometry(QtCore.QRect(285, 20, 80, 21))
+        self.senderLabel.setGeometry(QtCore.QRect(self.secondPixLabel, 20, 80, 21))
         self.senderLabel.setObjectName("senderLabel")
         
         self.passwordLabel = QtWidgets.QLabel(Form)
-        self.passwordLabel.setGeometry(QtCore.QRect(285, 50, 80, 21))
+        self.passwordLabel.setGeometry(QtCore.QRect(self.secondPixLabel, 50, 80, 21))
         self.passwordLabel.setObjectName("passwordLabel")
         
         self.sentOrErrorLabel = QtWidgets.QLabel(Form)
-        self.sentOrErrorLabel.setGeometry(QtCore.QRect(110, 240, 250, 21))
+        self.sentOrErrorLabel.setGeometry(QtCore.QRect(self.thirdPixLabel, 240, 250, 21))
         self.sentOrErrorLabel.setText("")
         self.sentOrErrorLabel.setObjectName("sentOrErrorLabel")
         
@@ -65,7 +70,7 @@ class Ui_Form(object):
         self.showPasswordBox.setObjectName("showPasswordBox")
         
         self.dateAndTimeLabel = QtWidgets.QLabel(Form)
-        self.dateAndTimeLabel.setGeometry(QtCore.QRect(10, 270, 140, 21))     
+        self.dateAndTimeLabel.setGeometry(QtCore.QRect(self.firstPixLabel, 270, 140, 21))     
         self.dateAndTimeLabel.setObjectName("dateAndTimeLabel")
 
         self.themeCheckBox = QtWidgets.QCheckBox(Form)
@@ -165,7 +170,27 @@ class Ui_Form(object):
         darkTheme = qdarkstyle.load_stylesheet_pyqt5()
         if self.themeCheckBox.isChecked():
             app.setStyleSheet(lightTheme + darkTheme)
+            self.firstPixLabel = self.firstPixLabel - 5
+            self.secondPixLabel = self.secondPixLabel - 5
+            self.thirdPixLabel = self.thirdPixLabel - 5
+            self.receiverLabel.setGeometry(QtCore.QRect(self.firstPixLabel, 20, 61, 20))
+            self.subjectLabel.setGeometry(QtCore.QRect(self.firstPixLabel, 60, 61, 21))
+            self.messageLabel.setGeometry(QtCore.QRect(self.firstPixLabel, 100, 61, 21))
+            self.senderLabel.setGeometry(QtCore.QRect(self.secondPixLabel, 20, 80, 21))
+            self.passwordLabel.setGeometry(QtCore.QRect(self.secondPixLabel, 50, 80, 21))
+            self.sentOrErrorLabel.setGeometry(QtCore.QRect(self.thirdPixLabel, 240, 250, 21))
+            self.dateAndTimeLabel.setGeometry(QtCore.QRect(self.firstPixLabel, 270, 140, 21))  
         else:
+            self.firstPixLabel = self.firstPixLabel + 5
+            self.secondPixLabel = self.secondPixLabel + 5
+            self.thirdPixLabel = self.thirdPixLabel + 5
+            self.receiverLabel.setGeometry(QtCore.QRect(self.firstPixLabel, 20, 61, 20))
+            self.subjectLabel.setGeometry(QtCore.QRect(self.firstPixLabel, 60, 61, 21))
+            self.messageLabel.setGeometry(QtCore.QRect(self.firstPixLabel, 100, 61, 21))
+            self.senderLabel.setGeometry(QtCore.QRect(self.secondPixLabel, 20, 80, 21))
+            self.passwordLabel.setGeometry(QtCore.QRect(self.secondPixLabel, 50, 80, 21))
+            self.sentOrErrorLabel.setGeometry(QtCore.QRect(self.thirdPixLabel, 240, 250, 21))  
+            self.dateAndTimeLabel.setGeometry(QtCore.QRect(self.firstPixLabel, 270, 140, 21))  
             app.setStyleSheet(lightTheme)  
             
 if __name__ == "__main__":
