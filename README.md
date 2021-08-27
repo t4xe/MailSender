@@ -1,4 +1,4 @@
-# Mail Sender v1.9
+# Mail Sender v2.0
 
 Usage:
 
