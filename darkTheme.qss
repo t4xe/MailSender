@@ -1,0 +1,50 @@
+QWidget {
+	background-color: rgba(25, 35, 45, 1);
+}
+
+QLabel {
+	color: rgba(201, 207, 212, 1);
+	font-family:Roboto Black 900;
+	font-size:12px;
+}
+
+QLabel#dateAndTimeLabel, #sentOrErrorLabel {
+	color: rgba(201, 207, 212, 1);
+	font-family:Roboto Black 900;
+	font-size:14px;
+}
+
+QPushButton {
+	color: rgba(201, 207, 212, 1);
+	font-family:Roboto;
+	font-size:12px;	
+	border: 2px solid rgba(84, 104, 122, 1);
+	border-radius: 4px;
+}
+
+QPushButton:hover {
+	background-color: rgba(84, 104, 122, 1);
+}
+
+QCheckBox {
+	color: rgba(201, 207, 212, 1);
+	font-family:Roboto;
+	font-size:12px;	
+}
+
+QCheckBox::indicator:unchecked {
+	image: url(icons/checkbox_unchecked_dark.png);
+}
+
+QCheckBox::indicator:checked {
+	image: url(icons/checkbox_checked_dark.png);
+}
+
+QLineEdit, QTextEdit {
+	color: rgba(255, 255, 255, 1);
+	font-size: 12px;
+	border: none;
+	background-color: rgba(0, 0, 0, 0);
+	border-bottom: 2px solid rgba(105, 119, 130, 255);
+	padding-bottom: 7px;
+}
