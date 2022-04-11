@@ -1,3 +1,8 @@
+QLabel#dateAndTimeLabel, #sentOrErrorLabel {
+	font-family:Roboto Black 900;
+	font-size:14px;
+}
+
 QLabel {
 	font-family:Roboto Black 900;
 	font-size:12px;
@@ -10,12 +15,31 @@ QPushButton {
 	border-radius: 4px;
 }
 
+QPushButton:hover {
+	background-color: gray;
+}
+
 QCheckBox {
 	font-family:Roboto;
 	font-size:12px;	
 }
 
+QCheckBox::indicator:unchecked {
+	image: url(icons/checkbox_unchecked.png);
+}
+
+QCheckBox::indicator:checked {
+	image: url(icons/checkbox_checked.png);
+}
+
 QLineEdit, QTextEdit {
-	border: 2px solid gray;
-	border-radius: 4px;
+	font-size: 12px;
+	border: none;
+	background-color: rgba(0, 0, 0, 0);
+	border-bottom: 2px solid rgba(105, 119, 130, 255);
+	padding-bottom: 7px;
+}
+
+QFrame#customTitleBar {
+	background-color: rgba(10, 20, 30, 1);
 }
