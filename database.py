@@ -4,6 +4,9 @@ class TemporaryDb(object):
     lastRow = 0
     keyState = None
     rowIdByUser = 0
+    txtContent = ("")
+    attachTextFile = False
+    addTxtToEnd = True
     isDbClear = False
     isFormVisible = False
 
