@@ -45,9 +45,13 @@ class Ui_Form(object):
         self.messageTextEdit.setObjectName("messageTextEdit")
         self.messageTextEdit.setPlaceholderText("Message")
         
-        self.pushButton = QtWidgets.QPushButton(Form)
-        self.pushButton.setGeometry(QtCore.QRect(10, 315, 75, 23))
-        self.pushButton.setObjectName("pushButton")
+        self.sendMailPushButton = QtWidgets.QPushButton(Form)
+        self.sendMailPushButton.setGeometry(QtCore.QRect(self.firstPixLabel, 315, 75, 23))
+        self.sendMailPushButton.setObjectName("sendMailPushButton")      
+        
+        self.txtPathPushButton = QtWidgets.QPushButton(Form)
+        self.txtPathPushButton.setGeometry(QtCore.QRect(self.firstPixLabel, 240, 100, 23))
+        self.txtPathPushButton.setObjectName("txtPathPushButton")
         
         self.senderLineEdit = QtWidgets.QLineEdit(Form)
         self.senderLineEdit.setGeometry(QtCore.QRect(self.secondPixLabel, 20, 171, 25))
@@ -69,11 +73,29 @@ class Ui_Form(object):
 
         self.themeCheckBox = QtWidgets.QCheckBox(Form)
         self.themeCheckBox.setGeometry(QtCore.QRect(self.secondPixLabel, 102, 121, 21))
-        self.themeCheckBox.setObjectName("themeCheckBox")    
+        self.themeCheckBox.setObjectName("themeCheckBox")  
+
+        self.txtPathDialog = QtWidgets.QDialog(Form)
+        self.txtPathDialog.resize(300, 120) #w, h
+        self.txtPathDialog.setWindowTitle("Attach Text File")
+        self.txtPathDialog.setWindowModality(QtCore.Qt.ApplicationModal)
+        self.txtPathDialog.setWindowFlag(QtCore.Qt.WindowContextHelpButtonHint, False)
+        
+        self.txtPathLineEdit = QtWidgets.QLineEdit(self.txtPathDialog)
+        self.txtPathLineEdit.setGeometry(QtCore.QRect(10, 20, 250, 25))
+        self.txtPathLineEdit.setPlaceholderText("Enter the path here")
+        
+        self.txtPathAttachPushButton = QtWidgets.QPushButton("Attach File", self.txtPathDialog)
+        self.txtPathAttachPushButton.setGeometry(QtCore.QRect(10, 90, 100, 23))    
+
+        self.pathFoundOrErrorLabel = QtWidgets.QLabel("", self.txtPathDialog)
+        self.pathFoundOrErrorLabel.setGeometry(QtCore.QRect(150, 90, 120, 23))
+        
+        self.txtAddToEnd = QtWidgets.QCheckBox("Add text file to end", self.txtPathDialog)
+        self.txtAddToEnd.setGeometry(QtCore.QRect(10, 60, 151, 21))
 
         self.showOrHideRecentButton = QtWidgets.QPushButton(Form)
         self.showOrHideRecentButton.setGeometry(QtCore.QRect(360, 330, 110, 23))
-        self.showOrHideRecentButton.setObjectName("showOrHideRecentButton")
         self.showOrHideRecentButton.setObjectName("showOrHideRecentButton")
         
         self.capsLockStatePic = QtWidgets.QLabel(Form)
@@ -81,8 +103,11 @@ class Ui_Form(object):
         self.capsLockStatePic.setPixmap(QtGui.QPixmap("icons/capsonimg.png"))
         self.capsLockStatePic.hide()
         
-        self.pushButton.clicked.connect(self.sendMail)
+        self.sendMailPushButton.clicked.connect(self.sendMail)
         self.showOrHideRecentButton.clicked.connect(self.showOrHideRecentMails)
+        self.txtPathPushButton.clicked.connect(self.txtFileAttachment)
+        self.txtPathAttachPushButton.clicked.connect(self.attachTextFile)
+        self.txtAddToEnd.stateChanged.connect(self.addTxtToEndState)
         self.showPasswordBox.stateChanged.connect(self.showPwStateChanged)  
         self.themeCheckBox.stateChanged.connect(self.themeCheckBoxStateChanged)          
         self.passwordLineEdit.setEchoMode(QtWidgets.QLineEdit.Password)
@@ -99,11 +124,12 @@ class Ui_Form(object):
 
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Mail Sender"))
-        self.pushButton.setText(_translate("Form", "Send"))
+        self.sendMailPushButton.setText(_translate("Form", "Send"))
         self.showPasswordBox.setText(_translate("Form", "Show Password"))  
         self.dateAndTimeLabel.setText(_translate("Form", "Date: " + currentDate))  
         self.themeCheckBox.setText(_translate("Form", "Dark Mode"))
         self.showOrHideRecentButton.setText(_translate("Form", "Show Recent Mails"))
+        self.txtPathPushButton.setText(_translate("Form", "Attach Text File"))
         
     def sendMail(self):
         firstLen = len(self.receiverLineEdit.text())
@@ -122,20 +148,28 @@ class Ui_Form(object):
                     locale.setlocale(locale.LC_TIME, curLocale)
                     dateAndTime = datetime.now()
                     currentDate = datetime.strftime(dateAndTime, "%D %X")
-                    
+                     
                     sender = self.senderLineEdit.text()
                     password = self.passwordLineEdit.text()
                     receiver = self.receiverLineEdit.text()
                     subject = self.subjectLineEdit.text()
                     messageText = self.messageTextEdit.toPlainText()
                         
-                    smtplib.smtp = smtplib.SMTP('smtp.gmail.com', 587) 
+                    smtplib.smtp = smtplib.SMTP('smtp.gmail.com', 587)
                     smtplib.smtp.ehlo()
-                    smtplib.smtp.starttls() 
+                    smtplib.smtp.starttls()
                     smtplib.smtp.ehlo()
                         
-                    smtplib.smtp.login(sender, password)               
-                    message = ("Subject: " + subject + "\n" + messageText)         
+                    smtplib.smtp.login(sender, password)     
+                     
+                    if database.TemporaryDb.attachTextFile:
+                        if database.TemporaryDb.addTxtToEnd:
+                            message = ("Subject: " + subject + "\n" + messageText + "\n" + database.TemporaryDb.txtContent)
+                        else:
+                            message = ("Subject: " + subject + "\n" + database.TemporaryDb.txtContent + "\n" + messageText)
+                    else:
+                        message = ("Subject: " + subject + "\n" + messageText)    
+                        
                     smtplib.smtp.sendmail(sender, receiver, message.encode("utf8"))
      
                     if database.TemporaryDb.isDbClear == True:              
@@ -225,7 +259,36 @@ class Ui_Form(object):
         dateAndTime = datetime.now()
         currentDate = datetime.strftime(dateAndTime, "%D %X") 
         self.dateAndTimeLabel.setText("Date: " + currentDate)
+        
+    def txtFileAttachment(self):
+        self.txtPathDialog.exec_()
+        
+    def attachTextFile(self):
+        filePath = self.txtPathLineEdit.text()
+        
+        try:
+            if filePath.endswith(".txt") and len(filePath) >= 4:
+                with open(f'{filePath}', encoding="utf8") as f:
+                    content = f.read()
+                    database.TemporaryDb.txtContent = content
+                    database.TemporaryDb.attachTextFile = True
+                    self.pathFoundOrErrorLabel.setText("File attached.")
+            elif len(filePath) < 4:
+                self.pathFoundOrErrorLabel.setText("File path is too short.")
+            else:
+                self.pathFoundOrErrorLabel.setText("Only .txt files allowed.")
+                
+        except FileNotFoundError:
+            self.pathFoundOrErrorLabel.setText("File not found.")
+        except PermissionError:
+            self.pathFoundOrErrorLabel.setText("Permission denied.")
     
+    def addTxtToEndState(self):
+        if self.txtAddToEnd.isChecked():
+            database.TemporaryDb.addTxtToEndState = True
+        else:
+            database.TemporaryDb.addTxtToEndState = False
+        
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
@@ -237,4 +300,4 @@ if __name__ == "__main__":
     ui.setupUi(Form)
     Form.show()
     sys.exit(app.exec_())
-    
+
