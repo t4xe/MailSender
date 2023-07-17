@@ -1,5 +1,8 @@
 # Mail Sender v2.1
 
+**PROJECT ABANDONED**
+*You can edit the source code of the project and make it work again.*
+
 Usage:
 
 Type in receiver's email address, subject and message.
